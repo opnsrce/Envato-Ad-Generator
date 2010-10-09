@@ -1,4 +1,4 @@
-class EnvatoAdGenerator
+class AdGenerator
   def initialize(images)
     @images = images;
   end

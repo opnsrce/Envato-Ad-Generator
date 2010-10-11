@@ -60,7 +60,6 @@ class EnvatoAPITest < Test::Unit::TestCase
   end
 
   def test_get_popular_items_xml
-    @envato_api = EnvatoAPI.new;
     rexml_doc = @envato_api.get_popular_items('activeden', 'xml');
     assert_instance_of(REXML::Document, rexml_doc);
     item_nodes = ['user', 'rating', 'thumbnail', 'url', 'cost', 'sales', 'id', 'uploaded-on', 'item'];
@@ -78,10 +77,64 @@ class EnvatoAPITest < Test::Unit::TestCase
   end
 
   def test_get_user_info_xml
-    @envato_api = EnvatoAPI.new;
     rexml_doc = @envato_api.get_user_info('collis', 'xml');
+    assert_instance_of(REXML::Document, rexml_doc);
     rexml_doc.root.each_element('//user') do |user|
-      self.check_element_for_nodes(user,  ['username', 'country', 'location', 'image', 'sales'])
+      self.check_element_for_nodes(user,  ['username', 'country', 'location', 'image', 'sales']);
     end if !self.check_element_for_nodes(rexml_doc.root, ['user'])
+  end
+  def test_get_release_info_xml
+    rexml_doc = @envato_api.get_release_info('xml');
+    assert_instance_of(REXML::Document, rexml_doc);
+    rexml_doc.root.each_element('//releases') do |releases|
+      releases.each_element('release') do |release|
+        release.each_element('private-chunks') do |private_chunks|
+          private_chunks.each_element('private-chunk') do |private_chunk|
+            self.check_element_for_nodes(private_chunk ['ttl', 'description', 'label']);
+          end if !self.check_element_for_nodes(private_chunks, ['private-chunk']);
+        end if !self.check_element_for_nodes(releases, ['private-chunks'])
+      end if !self.check_element_for_nodes(releases, ['release'])
+    end if !self.check_element_for_nodes(rexml_doc.root, ['releases'])
+  end
+  def test_get_thread_status_xml
+    rexml_doc = @envato_api.get_thread_status(32829, 'xml');
+    assert_instance_of(REXML::Document, rexml_doc);
+    rexml_doc.root.each_element('//thread_status') do |thread_status|
+      self.check_element_for_nodes(thread_status, ['last-reply-by', 'replies', 'url', 'title', 'last-reply']);
+    end if !self.check_element_for_nodes(rexml_doc.root, ['thread-status'])
+  end
+  def test_get_collection_info_xml
+    rexml_doc = @envato_api.get_collection_info(128701, 'xml')
+    assert_instance_of(REXML::Document, rexml_doc);
+    rexml_doc.root.each_element('//collection') do |collections|
+      collections.each_element('collection') do |collection|
+        self.check_element_for_nodes(collection, ['user', 'cost', 'rating', 'thumbnail', 'url', 'sales', 'id'])
+      end if !self.check_element_for_nodes(collections, ['collection'])
+    end if !self.check_element_for_nodes(rexml_doc.root, ['collection'])
+  end
+  def test_get_site_features_xml
+    # As of 10/11/2010 the 'features' command for the envato API is broken. It currently returns the following:
+    # error: undefined method `to_api_hash' for #<featured::weekly:0xa4cb300>
+    # If this test fails, it more than likely means that the function is now working properly
+    # and this test needs to be revised
+    assert_raise(TypeError) { @envato_api.get_site_features('activeden', 'xml') }
+  end
+
+  def test_get_new_files_xml
+    rexml_doc = @envato_api.get_new_files('themeforest', 'site-templates', 'xml')
+    assert_instance_of(REXML::Document, rexml_doc);
+    assert_nil(rexml_doc.root.elements['error'], 'API returned error response: Check your parameters');
+    rexml_doc.root.each_element('//new-files') do |new_files|
+      new_files.each_element('new-file') do |new_file|
+        self.check_element_for_nodes(new_file, ['user', 'url', 'thumbnail', 'item', 'id']);
+      end if !self.check_element_for_nodes(new_files, ['new-file'])
+    end if !self.check_element_for_nodes(rexml_doc.root, ['new-files'])
+  end
+  def test_get_new_files_from_user_xml
+    rexml_doc = @envato_api.get_new_files_from_user('collis', 'themeforest' 'xml');
+    assert_nil(rexml_doc.root.elements['error'], 'API returned error response: Check your parameters');
+    rexml_doc.root.each_element('//new-files-from-user') do |new_files_from_user|
+      new_files_From_user
+    end if !self.check_element_for_nodes(rexml_doc.root, ['new-files-from-user'])
   end
 end

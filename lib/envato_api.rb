@@ -4,7 +4,11 @@ class EnvatoAPI
     data = Net::HTTP.get_response(URI.parse(URI.encode(url))).body;
     case format
     when 'xml' then
-      data = REXML::Document.new(data);
+      begin
+        data = REXML::Document.new(data);
+      rescue
+        raise TypeError, 'Unable to return Rexml Document: XML may be invalid: ' << data;
+      end
     else
       raise ArgumentError, "#{format} is not a valid data format";
     end
@@ -48,7 +52,7 @@ class EnvatoAPI
   end
 
   def get_release_info(format)
-    url = generate_url('release', format);
+    url = generate_url('releases', format);
     return get_data(url, format);
   end
   
@@ -67,13 +71,13 @@ class EnvatoAPI
     return get_data(url, format);
   end
 
-  def get_new_files(site, format)
-    url = generate_url('new-files', format, site);
+  def get_new_files(site, category, format)
+    url = generate_url('new-files', format, "#{site},#{category}");
     return get_data(url, format);
   end
 
-  def get_new_files_from_user(user, format)
-    url = generate_url('new-files-from-user', format, user);
+  def get_new_files_from_user(user, site, format)
+    url = generate_url('new-files-from-user', format, "#{user},#{site}");
     return get_data(url, format);
   end
 

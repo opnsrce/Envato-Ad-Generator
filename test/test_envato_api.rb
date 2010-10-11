@@ -130,11 +130,29 @@ class EnvatoAPITest < Test::Unit::TestCase
       end if !self.check_element_for_nodes(new_files, ['new-file'])
     end if !self.check_element_for_nodes(rexml_doc.root, ['new-files'])
   end
+  
   def test_get_new_files_from_user_xml
-    rexml_doc = @envato_api.get_new_files_from_user('collis', 'themeforest' 'xml');
+    rexml_doc = @envato_api.get_new_files_from_user('collis', 'themeforest', 'xml');
     assert_nil(rexml_doc.root.elements['error'], 'API returned error response: Check your parameters');
     rexml_doc.root.each_element('//new-files-from-user') do |new_files_from_user|
-      new_files_From_user
+      new_files_from_user.each_element('new-files-from-user') do |new_file_from_user|
+        self.check_element_element_for_nodes(new_file_from_user, ['user', 'cost', 'rating', 'thumbnail', 'url', 'uploaded_on', 'sales', 'id']);
+      end if !self.check_element_for_nodes(new_files_from_user, ['new-files-from-user'])
     end if !self.check_element_for_nodes(rexml_doc.root, ['new-files-from-user'])
+  end
+  def test_get_random_new_files_xml
+    rexml_doc = @envato_api.get_random_new_files('activeden', 'xml');
+    rexmldoc.root.each_element('//random-new-files') do |random_new_files|
+      random_new_files.each_element('random-new-file') do |random_new_file|
+        self.check_element_for_node(random_new_file, ['user', 'cost', 'rating', 'thumbnail', 'url', 'sales', 'id', 'item']);
+      end if !self.check_element_for_nodes(random_new_files ['random-new-file'])
+    end if !self.check_element_for_nodes(rexml_doc.root, ['random-new-files'])
+  end
+
+  def test_get_total_users_xml
+    rexml_doc = @envato_api.get_total_users('activeden', 'xml');
+    rexml_doc.root.each_element('//total_users') do |total_users|
+      self.check_element_for_nodes(total_users, ['total-users']);
+    end if !self.check_element_for_nodes(rexml_doc.root, ['total-users'])
   end
 end

@@ -51,6 +51,7 @@ class EnvatoAPI
     url = generate_url('release', format);
     return get_data(url, format);
   end
+  
   def get_thread_status(thread_id, format)
     url = generate_url('thread-status', format, thread_id);
     return get_data(url, format);

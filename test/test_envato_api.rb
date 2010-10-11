@@ -61,16 +61,16 @@ class EnvatoAPITest < Test::Unit::TestCase
 
   def test_get_popular_items_xml
     @envato_api = EnvatoAPI.new;
-    popular_items = @envato_api.get_popular_items('activeden', 'xml');
-    assert_instance_of(REXML::Document, popular_items);
+    rexml_doc = @envato_api.get_popular_items('activeden', 'xml');
+    assert_instance_of(REXML::Document, rexml_doc);
     item_nodes = ['user', 'rating', 'thumbnail', 'url', 'cost', 'sales', 'id', 'uploaded-on', 'item'];
-      popular_items.each_element('//popular') do |popular_item|
-        popular_item.each_element('items-last-three-months') do |item_last_three_months|
+      rexml_doc.root.each_element('//popular') do |popular|
+        popular.each_element('items-last-three-months') do |item_last_three_months|
           item_last_three_months.each_element('item-last-three-months') do |item|
             self.check_element_for_nodes(item, item_nodes);
           end if !self.check_element_for_nodes(item_last_three_months, ['item-last-three-months'])
-        end if !self.check_element_for_nodes(popular_item, ['item-last-three-months'])
-      end if !self.check_element_for_nodes(popular_items, ['popular'])
+        end if !self.check_element_for_nodes(popular, ['item-last-three-months'])
+      end if !self.check_element_for_nodes(rexml_doc.root, ['popular'])
     # Make sure that a method call with a bad format type raises the right error
     assert_raise(ArgumentError) { @envato_api.get_popular_items('activeden', 'bad_format'); }
     # Make sure that a method call with a valid format type does not raise an error
@@ -79,6 +79,9 @@ class EnvatoAPITest < Test::Unit::TestCase
 
   def test_get_user_info_xml
     @envato_api = EnvatoAPI.new;
-    popular_items = @envato_api.get_popular_items('activeden', 'xml');
+    rexml_doc = @envato_api.get_user_info('collis', 'xml');
+    rexml_doc.root.each_element('//user') do |user|
+      self.check_element_for_nodes(user,  ['username', 'country', 'location', 'image', 'sales'])
+    end if !self.check_element_for_nodes(rexml_doc.root, ['user'])
   end
 end

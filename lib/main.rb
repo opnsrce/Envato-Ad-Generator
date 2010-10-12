@@ -1,8 +1,3 @@
-require 'net/http';
-require 'uri';
-require 'rexml/document';
-require 'RMagick';
-require 'json';
 require 'envato_api';
 require 'ad_generator';
 

@@ -1,7 +1,6 @@
 require 'net/http';
 require 'uri';
 require 'rexml/document';
-require 'RMagick';
 
 # A simple class designed to interact with the Envato API
 # To learn more visit http://wiki.envato.com/community/the-api/the-envato-marketplace-api/
@@ -157,7 +156,7 @@ class EnvatoAPI
   # * my_envato_api_instance.search_site('themeforest', 'site-templates', 'collis', 'xml)
   # * my_envato_api_instance.search('audiojungle', '', 'happy', 'xml')
   # * my_envato_api_instance.search('', 'site-templates', 'happy', 'xml')
-  # * EnvatoAPIInstance.search('', '' 'happy', 'xml')
+  # * my_envato_api_instance.search('', '' 'happy', 'xml')
   
   def search_site(site = '', type = '', search_term, format)
     url = generate_url('search', format, "#{site},#{type},#{search_term}");

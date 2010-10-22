@@ -1,11 +1,6 @@
 $:.unshift File.join(File.dirname(__FILE__),'..','lib')
 
 require 'test/unit'
-require 'net/http';
-require 'uri';
-require 'rexml/document';
-require 'RMagick';
-require 'json';
 require 'envato_api.rb';
 
 class EnvatoAPITest < Test::Unit::TestCase

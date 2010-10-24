@@ -123,14 +123,14 @@ class EnvatoAPI
   end
 
   # Retrieves the 'new-files-from-user' set for the given site, by the given user, in the given format
-  # * Usage: my_envato_api_instance.get_new_files('collis', 'themeforest', 'xml')
+  # * Usage: my_envato_api_instance.get_new_files_from_user('collis', 'themeforest', 'xml')
   def get_new_files_from_user(user, site, format)
     url = generate_url('new-files-from-user', format, "#{user},#{site}");
     return get_data(url, format);
   end
   
-  # Retrieves the 'popular' set for the given site in the given format
-  # * Usage: my_envato_api_instance.get_popular_items('activeden', 'xml')
+  # Retrieves the 'random-new-files' set for the given site in the given format
+  # * Usage: my_envato_api_instance.random_new_files('random-new-files', 'xml')
   def get_random_new_files(site, format)
     url = generate_url('random-new-files', format, site);
     return get_data(url, format);

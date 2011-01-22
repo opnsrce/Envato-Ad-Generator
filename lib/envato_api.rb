@@ -142,26 +142,6 @@ class EnvatoAPI
     url = generate_url('total-users', format, site);
     return get_data(url, format);
   end
-  # From the Envato API Documentation:
-  #  Search for items, users or forum messages. Returns only the first 50 results.
-  #  First parameter is site (e.g. activeden, audiojungle), second parameter is
-  #  type (e.g. site-templates, music, graphics, for a full list of types,
-  #  look at the search select box values on the particular marketplace), third paramater is
-  #  the search term (e.g. xml, preloader, dance, sky). First and second parameters are optional,
-  #  third is required.
-  #  Examples
-  #  * search:themeforest,site-templates,xml.json search:,,collis.xml
-  #  * search:audiojungle,,happy.xml
-  # Usage
-  # * my_envato_api_instance.search_site('themeforest', 'site-templates', 'collis', 'xml)
-  # * my_envato_api_instance.search('audiojungle', '', 'happy', 'xml')
-  # * my_envato_api_instance.search('', 'site-templates', 'happy', 'xml')
-  # * my_envato_api_instance.search('', '' 'happy', 'xml')
-  
-  def search_site(site = '', type = '', search_term, format)
-    url = generate_url('search', format, "#{site},#{type},#{search_term}");
-    return get_data(url, format);
-  end
   # Allows for calls to the Envato API using commands that may not be directly available in this class
   # (i.e., A new method has been added to the API that this class doesn't have a get_* call for
   #

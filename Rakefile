@@ -38,6 +38,8 @@ Rake::RDocTask.new do |rdoc|
   rdoc.title = "envato_add_generator Docs"
   rdoc.rdoc_dir = 'doc/rdoc' # rdoc output folder
   rdoc.options << '--line-numbers'
+  rdoc.template = "/var/lib/gems/1.8/gems/allison-2.0.3/lib/allison"
+
 end
 
 Rake::TestTask.new do |t|
